@@ -1,0 +1,47 @@
+plugins {
+    id 'java'
+}
+
+// to make zip file
+task buildZip(type: Zip) {
+    from compileJava
+    from processResources
+    into('lib') {
+        from configurations.runtime
+    }
+}
+
+build.dependsOn buildZip
+
+group 'com.mhoveidafar.stock'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+
+    compileOnly('org.projectlombok:lombok:1.18.8')
+    // to activate aws lambda runtime like RequestHandler interface in StockCreator class
+    compile 'com.amazonaws:aws-lambda-java-core:1.1.0'
+
+    // to activate aws lambda runtime events like APIGatewayProxyRequestEvent
+    compile 'com.amazonaws:aws-lambda-java-events:2.2.7'
+
+    // To activate dynamodb library using in Table
+    compile 'com.amazonaws:aws-java-sdk-dynamodb:1.11.634'
+
+    annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.8'
+
+    // Mock annotation
+    testCompile group: 'org.mockito', name: 'mockito-core', version: '3.1.0'
+
+    // assertThat
+    testCompile 'org.assertj:assertj-core:3.11.1'
+
+    //compile 'com.amazonaws:aws-java-sdk-lambda:1.11.642'
+}
